@@ -1,7 +1,26 @@
-node_modules/
+# Dependencies
 **/node_modules/
-.env.development
-.env
-*.env
-.DS_Store
 
+# Environment files (root, Backend, frontend and variations)
+**/.env
+**/.env.*
+!**/.env.example
+
+# Build outputs
+**/dist/
+**/build/
+
+# Deployment tool folders
+**/.vercel/
+
+# Debug logs
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# System and editor files
+.DS_Store
+Thumbs.db
+**/.vscode/
+**/.idea/
