@@ -2,6 +2,7 @@ const UserModel = require("../Models/user.model");
 const pendingRegistrationModel = require("../Models/pendingRegistration.model");
 const { generateAndSendOtp, verifyOtpRecord } = require("../Services/otp.services");
 const { createTokensAndSession, rotateSessionToken, revokeSession} = require("../Services/token.services");
+const tokenBlackListModel = require("../Models/TokenBlackList.model")
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -237,8 +238,11 @@ const refreshTokenController = async (req, res) => {
 
 const logoutController = async (req, res) => {
   try {
-    const incomingRefreshToken = req.cookies.refreshToken;
+    const incomingRefreshToken = req.cookies.refreshToken || req.headers.authorization?.split(" ")[1];
     if (incomingRefreshToken) {
+      await tokenBlackListModel.create({
+        token : incomingRefreshToken
+      });
       await revokeSession(incomingRefreshToken);
     }
 

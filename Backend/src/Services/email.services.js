@@ -21,6 +21,7 @@ transporter.verify((error,success) => {
     }
 })
 
+// Throws on failure so the calling controller can handle it
 const sendEmail = async (to,subject,text,html) => {
     try{
         const info = await transporter.sendMail({
@@ -31,21 +32,35 @@ const sendEmail = async (to,subject,text,html) => {
             html:html
         })
         console.log("message sent: %s",info.messageId);
-        console.log("preview URL: %s", nodemailer.getTestMessageUrl(info));
     }
     catch(error){
-        return res.status(400).json({
-            message : error.message
-        })
+        console.error("email failed: %s", error.message);
+        throw error;
     }
 }
 
 async function registrationSucessEmail(to,name){
-    const subject = "welcome to Transactify";
-    const text = `Hello ${name},\n\nThank you for registering at Backend Ledger. We're excited to have you on board!\n\nBest regards,\nThe Backend Ledger Team`;
-    const html = `<p>Hello ${name},</p><p>Thank you for registering at Backend Ledger. We're excited to have you on board!</p><p>Best regards,<br>The Backend Ledger Team</p>`;
+    const subject = "Welcome to Transactify";
+    const text = `Hello ${name},\n\nThank you for registering at Transactify. We're excited to have you on board!\n\nBest regards,\nThe Transactify Team`;
+    const html = `<p>Hello ${name},</p><p>Thank you for registering at Transactify. We're excited to have you on board!</p><p>Best regards,<br>The Transactify Team</p>`;
 
-    await sendEmail(userEmail, subject, text ,html);
+    await sendEmail(to, subject, text ,html);
 }
 
-module.exports = {sendEmail,registrationSucessEmail};
+async function transactionEmail (to, name, amount, fromAccount, toAccount){
+    const subject = "Transaction Notification";
+    const text = `Hello ${name},\n\nA transaction of amount ${amount} has been made from account ${fromAccount} to account ${toAccount}.\n\nBest regards,\nThe Transactify Team`;
+    const html = `<p>Hello ${name},</p><p>A transaction of amount ${amount} has been made from account ${fromAccount} to account ${toAccount}.</p><p>Best regards,<br>The Transactify Team</p>`;
+
+    await sendEmail(to, subject, text, html);
+}
+
+async function transactionFailedEmail (to, name, amount, fromAccount, toAccount){
+    const subject = "Transaction Failed Notification";
+    const text = `Hello ${name},\n\nWe regret to inform you that a transaction of amount ${amount} from account ${fromAccount} to account ${toAccount} has failed.\n\nBest regards,\nThe Transactify Team`;
+    const html = `<p>Hello ${name},</p><p>We regret to inform you that a transaction of amount ${amount} from account ${fromAccount} to account ${toAccount} has failed.</p><p>Best regards,<br>The Transactify Team</p>`;
+
+    await sendEmail(to, subject, text, html);
+}
+
+module.exports = {sendEmail,registrationSucessEmail,transactionEmail,transactionFailedEmail};

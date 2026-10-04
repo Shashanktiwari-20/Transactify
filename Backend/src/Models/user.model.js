@@ -24,6 +24,12 @@ const UserSchema = new mongoose.Schema(
     isVerified: {
       type: Boolean,
       default: false
+    },
+    systemUser: {
+      type: Boolean,
+      default: false,
+      immutable: true,
+      select: false
     }
   },
   { timestamps: true }

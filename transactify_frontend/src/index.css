@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light mode colours (R G B) */
+:root {
+  --page: 246 243 248;
+  --card: 255 255 255;
+  --line: 225 216 231;
+  --body: 46 20 55;
+  --muted: 107 90 117;
+  --ok: 47 125 79;
+  --warn: 180 83 9;
+  --gold: 201 162 77;
+}
+
+/* Dark mode colours: the .dark class is set on <html> */
+.dark {
+  color-scheme: dark;
+  --page: 22 10 27;
+  --card: 36 17 44;
+  --line: 59 33 70;
+  --body: 240 235 243;
+  --muted: 191 179 199;
+  --ok: 111 207 151;
+  --warn: 240 160 75;
+  --gold: 201 162 77;
+}
+
+@layer base {
+  body {
+    background-color: rgb(var(--page));
+    color: rgb(var(--body));
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Colour classes used across the pages */
+@layer utilities {
+  .bg-page { background-color: rgb(var(--page)); }
+  .bg-card { background-color: rgb(var(--card)); }
+  .border-line { border-color: rgb(var(--line)); }
+  .text-body { color: rgb(var(--body)); }
+  .text-muted { color: rgb(var(--muted)); }
+  .text-gold { color: rgb(var(--gold)); }
+  .bg-brand { background-image: linear-gradient(135deg, #2e1437 0%, #6a3d7a 55%, #948e99 100%); }
+}
+
+/* Reusable pieces: inputs, buttons, alerts, badge */
+@layer components {
+  .field {
+    @apply w-full rounded-lg border px-3 py-2.5;
+    background-color: rgb(var(--page));
+    border-color: rgb(var(--line));
+    color: rgb(var(--body));
+  }
+  .field::placeholder { color: rgb(var(--muted)); }
+  .field:focus {
+    outline: none;
+    border-color: rgb(var(--gold));
+    box-shadow: 0 0 0 3px rgb(var(--gold) / 0.35);
+  }
+
+  .btn-primary {
+    background-image: linear-gradient(135deg, #2e1437 0%, #6a3d7a 55%, #948e99 100%);
+    color: #ffffff;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-secondary {
+    border: 1px solid rgb(var(--line));
+    background-color: rgb(var(--card));
+    color: rgb(var(--body));
+  }
+  .btn-secondary:hover { border-color: rgb(var(--gold)); }
+  .btn-primary:disabled,
+  .btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .alert-error {
+    border-color: rgb(var(--warn) / 0.5);
+    background-color: rgb(var(--warn) / 0.1);
+    color: rgb(var(--warn));
+  }
+  .alert-success {
+    border-color: rgb(var(--ok) / 0.5);
+    background-color: rgb(var(--ok) / 0.1);
+    color: rgb(var(--ok));
+  }
+
+  .badge {
+    background-color: rgb(46 20 55 / 0.7);
+    color: rgb(var(--gold));
+  }
+}
